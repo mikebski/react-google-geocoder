@@ -26,7 +26,7 @@ If there are multiple results returned, they are displayed as a list and one can
 selected.  Once a unique address is located, the component will call a callback with
 all of the available address information.
 
-See the demo [Here](demo)
+See the demo [https://mikebski.github.io/react-google-geocoder-demo/](https://mikebski.github.io/react-google-geocoder-demo/)
 
 ## Installation
 
