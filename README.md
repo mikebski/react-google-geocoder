@@ -1,6 +1,5 @@
 # react-google-geocoder
 
-
 ## License ##
 
 Copyright (c) 2014-2018 Mike Baranski <http://www.mikeski.net>
@@ -33,6 +32,16 @@ See the demo [https://mikebski.github.io/react-google-geocoder-demo/](https://mi
 Install using NPM:
 
 `npm install react-google-geocoder --save`
+
+You need to get a Google API credential that has GeoCoding enabled.  See 
+[https://developers.google.com/maps/documentation/geocoding/get-api-key](https://developers.google.com/maps/documentation/geocoding/get-api-key)
+for information on how to get a key. 
+
+### Note on Credential
+
+For local development with an npm server, for some reason this setup requires a "server" key
+instead of a credential that is restricted by referrer.  If you get errors about needing server
+credentials without referrer restrictions, generate a new server credential.
 
 ## Usage
 
