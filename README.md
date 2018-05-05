@@ -67,9 +67,7 @@ See the Options below for all available options
 |formButtonWrapperClass|PropTypes.string|`geo-code-form-button-wrapper`|CSS class for wrapper for form buttons|
 |inputClass|PropTypes.string|`geo-code-input`|CSS class for input|
 |labelClass|PropTypes.string|`geo-code-label`|CSS class for label|
-|onAddressAccept|PropTypes.func|` (value) => alert("Accepted: " + JSON.stringify(value))`|Method to call when "Accept" is clicked, this gets passed the address information
-|
-||||
+|onAddressAccept|PropTypes.func|` (value) => alert("Accepted: " + JSON.stringify(value))`|Method to call when "Accept" is clicked, this gets passed the address information|
 
 
 ## Help
