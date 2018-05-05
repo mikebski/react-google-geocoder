@@ -44,8 +44,9 @@ See the Options below for all available options
 
 ## Options
 
+
 |Property|Type|Default Value|Description|
-|--------|----|-----------|
+|--------|----|-----------|-------------|
 |apiKey|PropTypes.string.isRequired|**None**|Your Google API key|
 |searchButtonLabel|PropTypes.string|`Search`|Label for "Search" button|
 |resetButtonLabel|PropTypes.string|`Reset`|Label for "Reset" button|
@@ -68,6 +69,8 @@ See the Options below for all available options
 |labelClass|PropTypes.string|`geo-code-label`|CSS class for label|
 |onAddressAccept|PropTypes.func|` (value) => alert("Accepted: " + JSON.stringify(value))`|Method to call when "Accept" is clicked, this gets passed the address information
 |
+||||
+
 
 ## Help
 
