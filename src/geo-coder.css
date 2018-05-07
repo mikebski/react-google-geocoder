@@ -57,6 +57,8 @@
 .geo-code-table td {
     color: #669;
     padding: 9px 8px 0;
+    text-align: left;
+    border-bottom: 1px dashed #6678b1;
 }
 
 .geo-code-table tbody tr:hover td {
