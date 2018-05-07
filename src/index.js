@@ -12,6 +12,44 @@ const STATE = {
     READY: "ready"
 }
 
+class GeoCoderAcceptButton extends React.Component {
+    render() {
+        return (
+            <button className={this.props.acceptButtonClass}
+                    disabled={this.props.disabled} type="button"
+                    onClick={(event) => {
+                        this.props.onClick(event)
+                    }}>{this.props.acceptButtonLabel}
+            </button>
+        )
+    }
+}
+
+class GeoCoderResetButton extends React.Component {
+    render() {
+        return (
+            <button className={this.props.resetButtonClass} disabled={this.props.disabled} type="button"
+                    onClick={(event) => {
+                        this.props.onClick(event)
+                    }}>{this.props.resetButtonLabel}
+            </button>
+        )
+    }
+}
+
+class GeoCoderSearchButton extends React.Component {
+    render() {
+        return (
+            <button className={this.props.searchButtonClass}
+                    disabled={this.props.disabled} type="button"
+                    onClick={(event) => {
+                        this.props.onClick(event)
+                    }}>{this.props.searchButtonLabel}
+            </button>
+        )
+    }
+}
+
 class GeoCoderInput extends React.Component {
     render() {
         const inputId = 'geo-coder-' + new Date().valueOf()
@@ -43,7 +81,6 @@ class GeoCoder extends React.Component {
         this.changeAddress = this.changeAddress.bind(this)
         this.searchAddress = this.searchAddress.bind(this)
         this.resetButton = this.resetButton.bind(this)
-        this.input = this.props.input
         this.state = GeoCoder.DEFAULT_STATE()
     }
 
@@ -108,12 +145,12 @@ class GeoCoder extends React.Component {
     }
 
     resetButton() {
-        return (<button className={this.props.resetButtonClass} disabled={this.state.searching} type="button"
-                        onClick={(event) => {
-                            this.setState(GeoCoder.DEFAULT_STATE())
-                        }}>
-            {this.props.resetButtonLabel}
-        </button>)
+        return (
+            <this.props.resetButton disabled={false} {...this.props}
+                                    onClick={(event) => {
+                                        this.setState(GeoCoder.DEFAULT_STATE())
+                                    }}/>
+        )
     }
 
     render() {
@@ -125,21 +162,21 @@ class GeoCoder extends React.Component {
                     <fieldset>
                         {this.state.state === STATE.REQUEST_ERROR ?
                             <p className={this.props.errorMessageClass}>{this.props.errorMessage}</p> : null}
-                        <this.input {...this.props} onChange={this.changeAddress} searching={this.state.searching} address={this.state.address}/>
+                        <this.props.input {...this.props} onChange={this.changeAddress} searching={this.state.searching}
+                                          address={this.state.address}/>
                     </fieldset>
                     <div className={this.props.formButtonWrapperClass}>
-                        <button className={this.props.searchButtonClass}
-                                disabled={this.state.searching || this.state.state === STATE.ONE_FOUND} type="button"
-                                onClick={(event) => {
-                                    component.searchAddress(component.state.address)
-                                }}>{this.props.searchButtonLabel}
-                        </button>
+                        <this.props.searchButton {...this.props}
+                                                 onClick={(event) => {
+                                                     component.searchAddress(component.state.address)
+                                                 }}
+                                                 disabled={this.state.searching || this.state.state === STATE.ONE_FOUND}
+                        />
                         {this.resetButton()}
-                        <button className={this.props.acceptButtonClass} disabled={this.state.state !== STATE.ONE_FOUND}
-                                type="button"
-                                onClick={(event) => this.props.onAddressAccept(component.state.foundAddresses[0])}
-                        >{this.props.acceptButtonLabel}
-                        </button>
+                        <this.props.acceptButton {...this.props}
+                                                 onClick={(event) => this.props.onAddressAccept(component.state.foundAddresses[0])}
+                                                 disabled={this.state.state !== STATE.ONE_FOUND}
+                        />
                     </div>
                 </form>
                 {component.state.state === STATE.MULTIPLE_FOUND ?
@@ -217,6 +254,9 @@ GeoCoder.propTypes = {
     onAddressAccept: PropTypes.func,
 
     input: PropTypes.element,
+    searchButton: PropTypes.element,
+    resetButton: PropTypes.element,
+    acceptButton: PropTypes.element,
 }
 
 GeoCoder.defaultProps = {
@@ -245,6 +285,9 @@ GeoCoder.defaultProps = {
     labelClass: "geo-code-label",
 
     input: GeoCoderInput,
+    searchButton: GeoCoderSearchButton,
+    resetButton: GeoCoderResetButton,
+    acceptButton: GeoCoderAcceptButton
 }
 
 export default GeoCoder

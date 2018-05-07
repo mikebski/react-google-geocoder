@@ -77,6 +77,8 @@ See the Options below for all available options
 |inputClass|PropTypes.string|`geo-code-input`|CSS class for input|
 |labelClass|PropTypes.string|`geo-code-label`|CSS class for label|
 |onAddressAccept|PropTypes.func|` (value) => alert("Accepted: " + JSON.stringify(value))`|Method to call when "Accept" is clicked, this gets passed the address information|
+|input|PropTypes.element|`GeoCoderInput`|Input to use for the form|
+|searchButton|PropTypes.element|`GeoCoderSearchButton`|Search button to use for the form|
 
 
 ## Help
