@@ -1,6 +1,6 @@
 {
   "name": "react-google-geocoder",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "description": "Google GeoCoding Input",
   "keywords": "react google-maps geocoding geo",
   "homepage": "https://github.com/mikebski/react-google-geocoder",

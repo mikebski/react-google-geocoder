@@ -50,6 +50,18 @@ class GeoCoderSearchButton extends React.Component {
     }
 }
 
+class GeoCoderSelectButton extends React.Component {
+    render() {
+        return (
+            <button className={this.props.selectButtonClass}
+                    type="button"
+                    onClick={(event) => {
+                        this.props.onClick(event)
+                    }}>{this.props.selectButtonLabel}
+            </button>
+        )
+    }
+}
 class GeoCoderInput extends React.Component {
     render() {
         const inputId = 'geo-coder-' + new Date().valueOf()
@@ -201,14 +213,16 @@ class GeoCoder extends React.Component {
                                         {val.formatted_address}
                                     </td>
                                     <td>
-                                        <button className={this.props.selectButtonClass} type="button"
-                                                onClick={(event) => component.setState({
-                                                    address: val.formatted_address,
-                                                    foundAddresses: [val],
-                                                    finalItem: val,
-                                                    state: STATE.ONE_FOUND
-                                                })}>{this.props.selectButtonLabel}
-                                        </button>
+                                        <this.props.selectButton {...this.props}
+                                                                 onClick={(event) => component.setState({
+                                                                     address: val.formatted_address,
+                                                                     foundAddresses: [val],
+                                                                     finalItem: val,
+                                                                     state: STATE.ONE_FOUND
+                                                                 })}
+                                                                 disabled={false}
+                                                                 type="button"
+                                        />
                                     </td>
                                 </tr>
                             )
@@ -257,6 +271,7 @@ GeoCoder.propTypes = {
     searchButton: PropTypes.element,
     resetButton: PropTypes.element,
     acceptButton: PropTypes.element,
+    selectButton: PropTypes.element,
 }
 
 GeoCoder.defaultProps = {
@@ -287,7 +302,8 @@ GeoCoder.defaultProps = {
     input: GeoCoderInput,
     searchButton: GeoCoderSearchButton,
     resetButton: GeoCoderResetButton,
-    acceptButton: GeoCoderAcceptButton
+    acceptButton: GeoCoderAcceptButton,
+    selectButton: GeoCoderSelectButton
 }
 
 export default GeoCoder
