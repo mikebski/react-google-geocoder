@@ -79,11 +79,11 @@ See the Options below for all available options
 |onAddressAccept|PropTypes.func|` (value) => alert("Accepted: " + JSON.stringify(value))`|Method to call when "Accept" is clicked, this gets passed the address information|
 |input|PropTypes.element|`GeoCoderInput`|Input to use for the form|
 |searchButton|PropTypes.element|`GeoCoderSearchButton`|Search button to use for the form|
-|input|`GeoCoderInput`|Input to use for the form, see the demo page for how to do this|
-|searchButton|GeoCoderSearchButton|Button to use for search|
-|resetButton|GeoCoderResetButton|Button to use for reset|
-|acceptButton|GeoCoderAcceptButton|Button to use for accept|
-|selectButton|GeoCoderSelectButton|Button to use for select|
+|input|PropTypes.element|`GeoCoderInput`|Input to use for the form, see the demo page for how to do this|
+|searchButton|PropTypes.element|`GeoCoderSearchButton`|Button to use for search|
+|resetButton|PropTypes.element|`GeoCoderResetButton`|Button to use for reset|
+|acceptButton|PropTypes.element|`GeoCoderAcceptButton`|Button to use for accept|
+|selectButton|PropTypes.element|`GeoCoderSelectButton`|Button to use for select|
 
 ## Help
 

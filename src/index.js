@@ -9,7 +9,8 @@ const STATE = {
     REQUEST_DENIED: "request-denied",
     REQUEST_ERROR: "request-error",
     SEARCHING: "searching",
-    READY: "ready"
+    READY: "ready",
+    LOADING_API: "loading-api",
 }
 
 class GeoCoderAcceptButton extends React.Component {
@@ -62,6 +63,7 @@ class GeoCoderSelectButton extends React.Component {
         )
     }
 }
+
 class GeoCoderInput extends React.Component {
     render() {
         const inputId = 'geo-coder-' + new Date().valueOf()
@@ -71,7 +73,7 @@ class GeoCoderInput extends React.Component {
                        htmlFor={inputId}><span>{this.props.fieldLabel}</span></label>
                 <input className={this.props.inputClass} id={inputId} disabled={this.props.searching}
                        value={this.props.address}
-                       onChange={(event) => this.props.onChange(event.target.value)}/>
+                       onChange={(event) => this.props.onChange(event)}/>
             </div>
         )
     }
@@ -83,7 +85,7 @@ class GeoCoder extends React.Component {
             address: "",
             foundAddresses: [],
             api_status: null,
-            state: STATE.READY,
+            state: STATE.LOADING_API,
             searching: false
         }
     }
@@ -94,11 +96,25 @@ class GeoCoder extends React.Component {
         this.searchAddress = this.searchAddress.bind(this)
         this.resetButton = this.resetButton.bind(this)
         this.state = GeoCoder.DEFAULT_STATE()
+        this.ready = this.ready.bind(this)
     }
 
-    changeAddress(val) {
+    componentDidMount() {
+        window.ready = this.ready;
+        //loadJS('https://maps.googleapis.com/maps/api/js?key=' + this.props.apiKey + '&callback=ready')
+    }
+
+    ready() {
         this.setState({
-            address: val
+            state: STATE.READY
+        })
+        this.geocoder = new window.google.maps.GeoCoder()
+        console.log("Google is", google)
+    }
+
+    changeAddress(event) {
+        this.setState({
+            address: event.target.value
         })
     }
 
@@ -109,52 +125,60 @@ class GeoCoder extends React.Component {
             searching: true
         })
         const component = this;
-        fetch("https://maps.googleapis.com/maps/api/geocode/json?key=" + this.props.apiKey + "&address=" + encodeURIComponent(addressFromForm)).then(
-            (response) => {
-                response.json()
-                    .then(function (myJson) {
-                        console.log("JSON from API", myJson);
-                        if (myJson.status === "OK") {
-                            const results = myJson.results
+        this.geocoder = new window.google.maps.Geocoder()
+        this.geocoder.geocode({'address': addressFromForm},
+            //fetch("https://maps.googleapis.com/maps/api/geocode/json?key=" + this.props.apiKey + "&address=" + encodeURIComponent(addressFromForm)).then(
+            //(response) => {
+            // response.json()
+            // .then(function (myJson) {
+            (myJson, status) => {
+                console.log("JSON from API", myJson);
+                if (status === "OK") {
+                    const results = myJson
 
-                            var finalResults = myJson.results
-                            var finalAddress = addressFromForm
-                            var theState = STATE.MULTIPLE_FOUND
-                            var fi = null
-                            if (results.length === 0) {
-                                finalResults = []
-                                finalAddress = addressFromForm
-                                theState = STATE.NONE_FOUND
-                            } else if (results.length === 1) {
-                                finalResults = results
-                                finalAddress = myJson.results[0].formatted_address
-                                fi = myJson.results[0]
-                                theState = STATE.ONE_FOUND
-                            }
-                            component.setState({
-                                address: finalAddress,
-                                foundAddresses: finalResults,
-                                api_status: myJson.status,
-                                finalItem: fi,
-                                state: theState,
-                            })
-                        } else {
-                            component.setState({
-                                state: STATE.REQUEST_ERROR,
-                            })
-                        }
-                    });
-            }).catch((error) => {
-                component.setState({
-                    state: STATE.REQUEST_ERROR,
-                })
-                console.log("Error", error)
-            }
-        ).finally(() => {
-                component.setState({searching: false})
-            }
-        )
+                    var finalResults =results
+                    var finalAddress = addressFromForm
+                    var theState = STATE.MULTIPLE_FOUND
+                    var fi = null
+                    if (results.length === 0) {
+                        finalResults = []
+                        finalAddress = addressFromForm
+                        theState = STATE.NONE_FOUND
+                    } else if (results.length === 1) {
+                        finalResults = results
+                        finalAddress = results[0].formatted_address
+                        fi = results[0]
+                        theState = STATE.ONE_FOUND
+                    }
+                    component.setState({
+                        address: finalAddress,
+                        foundAddresses: finalResults,
+                        api_status: status,
+                        finalItem: fi,
+                        state: theState,
+                        searching: false
+                    })
+                } else {
+                    component.setState({
+                        state: STATE.REQUEST_ERROR,
+                        searching: false
+                    })
+                    console.log("Error with request")
+                }
+            });
     }
+
+    //     }).catch((error) => {
+    //         component.setState({
+    //             state: STATE.REQUEST_ERROR,
+    //         })
+    //         console.log("Exception from Google", error)
+    //     }
+    // ).finally(() => {
+    //         component.setState({searching: false})
+    //     }
+    //)
+
 
     resetButton() {
         return (
@@ -304,6 +328,15 @@ GeoCoder.defaultProps = {
     resetButton: GeoCoderResetButton,
     acceptButton: GeoCoderAcceptButton,
     selectButton: GeoCoderSelectButton
+}
+
+function loadJS(src) {
+    var ref = window.document.getElementsByTagName("script")[0];
+    var script = window.document.createElement("script");
+    script.src = src;
+    script.crossOrigin = 'anonymous';
+    script.async = true;
+    ref.parentNode.insertBefore(script, ref);
 }
 
 export default GeoCoder
