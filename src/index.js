@@ -10,7 +10,6 @@ const STATE = {
     REQUEST_ERROR: "request-error",
     SEARCHING: "searching",
     READY: "ready",
-    LOADING_API: "loading-api",
 }
 
 class GeoCoderAcceptButton extends React.Component {
@@ -85,7 +84,7 @@ class GeoCoder extends React.Component {
             address: "",
             foundAddresses: [],
             api_status: null,
-            state: STATE.LOADING_API,
+            state: STATE.READY,
             searching: false
         }
     }
@@ -96,20 +95,6 @@ class GeoCoder extends React.Component {
         this.searchAddress = this.searchAddress.bind(this)
         this.resetButton = this.resetButton.bind(this)
         this.state = GeoCoder.DEFAULT_STATE()
-        this.ready = this.ready.bind(this)
-    }
-
-    componentDidMount() {
-        window.ready = this.ready;
-        //loadJS('https://maps.googleapis.com/maps/api/js?key=' + this.props.apiKey + '&callback=ready')
-    }
-
-    ready() {
-        this.setState({
-            state: STATE.READY
-        })
-        this.geocoder = new window.google.maps.GeoCoder()
-        console.log("Google is", google)
     }
 
     changeAddress(event) {
@@ -127,10 +112,6 @@ class GeoCoder extends React.Component {
         const component = this;
         this.geocoder = new window.google.maps.Geocoder()
         this.geocoder.geocode({'address': addressFromForm},
-            //fetch("https://maps.googleapis.com/maps/api/geocode/json?key=" + this.props.apiKey + "&address=" + encodeURIComponent(addressFromForm)).then(
-            //(response) => {
-            // response.json()
-            // .then(function (myJson) {
             (myJson, status) => {
                 console.log("JSON from API", myJson);
                 if (status === "OK") {
@@ -266,7 +247,6 @@ class GeoCoder extends React.Component {
 }
 
 GeoCoder.propTypes = {
-    apiKey: PropTypes.string.isRequired,
     searchButtonLabel: PropTypes.string,
     resetButtonLabel: PropTypes.string,
     selectButtonLabel: PropTypes.string,
